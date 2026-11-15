@@ -151,3 +151,14 @@ def test_delete_missing_item(client):
     response = client.delete("/inventory/999")
 
     assert response.status_code == 404
+
+
+def test_reject_negative_price(client):
+    response = client.post("/inventory", json={
+        "name": "Milk",
+        "quantity": 10,
+        "price": -5.00
+    })
+
+    assert response.status_code == 400
+    assert "error" in response.get_json()
